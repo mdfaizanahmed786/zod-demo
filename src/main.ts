@@ -36,80 +36,97 @@ console.log(UserSchema.shape.username)
 
 // USE CASES:
 
-1. Pick matching
-const BlogSchema = z.object({
-    title:z.string(),
-    description:z.string(),
-    date:z.date(),
+//1. Pick matching
+// const BlogSchema = z.object({
+//     title:z.string(),
+//     description:z.string(),
+//     date:z.date(),
 
   
-
-2.     //   we also many other types like: z.never(), z.unknown(), z.any(), z.null(), z.undefined(), z.void()(returns undefined),  z.unknown()
-  }).pick({title:true});  //.pick() allows us to pick the properties that we want to use
-  type Blog=z.infer<typeof BlogSchema>
-when we hover Blog it only gives us the title property which is is specified in pick method.
-
+//2.     //   we also many other types like: z.never(), z.unknown(), z.any(), z.null(), z.undefined(), z.void()(returns undefined),  z.unknown()
+//   }).pick({title:true});  //.pick() allows us to pick the properties that we want to use
+//   type Blog=z.infer<typeof BlogSchema>
+// when we hover Blog it only gives us the title property which is is specified in pick method.
 
 
 
 
 
-3. Omiting the properties
- const BlogSchema = z.object({
-        title:z.string(),
-        description:z.string(),
-        date:z.date(),
-      }).omit({title:true});  //.omit() allows us to omit the value provided in the method.
-      type Blog=z.infer<typeof BlogSchema>
+
+//3. Omiting the properties
+//  const BlogSchema = z.object({
+//         title:z.string(),
+//         description:z.string(),
+//         date:z.date(),
+//       }).omit({title:true});  //.omit() allows us to omit the value provided in the method.
+//       type Blog=z.infer<typeof BlogSchema>
 
 
 
-4. Extending the schema
+//4. Extending the schema
+// const BlogSchema = z.object({
+//     title:z.string(),
+//     description:z.string(),
+//     date:z.date(),
+// }).extend({comments:z.string().optional()}) // .extend() allows us to extend the schema
+// type Blog=z.infer<typeof BlogSchema >
+
+
+
+//5. Merging the schema
+// const BlogSchema = z.object({
+//     title:z.string(),
+//     description:z.string(),
+//     date:z.date()
+// }).merge(z.object({comments:z.string()})) // .merge() allows us to merge the schema  
+// type Blog=z.infer<typeof BlogSchema >                                                  
+
+
+
+
+
+// 6. What if we create an object that has a property that is not in the schema
+// const BlogSchema = z.object({
+//     title:z.string(),
+//     description:z.string(),
+//     date:z.date()
+// }).strict()
+// const BlogSchema = z.object({
+//     title:z.string(),
+//     description:z.string(),
+//     date:z.date()
+// }).passthrough()
+
+// type Blog=z.infer<typeof BlogSchema >
+// const blog:Blog={
+//     title:"Hello",
+//     description:"Hello world",
+//     date:new Date(),
+//     comments:"Hello world"
+// }
+// console.log(BlogSchema.safeParse(blog).success) // it will return true but it will not include the comments property in the type Blog
+// If we want to avoid it we can use .strict() method: It will throw an error if we pass a property that is not in the schema
+// If we want to avoid it we can use .passthrough() method: It will not throw an error if we pass a property that is not in the schema
+
+
+// Arrays im zod
+
 const BlogSchema = z.object({
     title:z.string(),
     description:z.string(),
     date:z.date(),
-}).extend({comments:z.string().optional()}) // .extend() allows us to extend the schema
-type Blog=z.infer<typeof BlogSchema >
-
-
-
-5. Merging the schema
-const BlogSchema = z.object({
-    title:z.string(),
-    description:z.string(),
-    date:z.date()
-}).merge(z.object({comments:z.string()})) // .merge() allows us to merge the schema  
-type Blog=z.infer<typeof BlogSchema >                                                  
-
-
-
-
-
-6. What if we create an object that has a property that is not in the schema
-const BlogSchema = z.object({
-    title:z.string(),
-    description:z.string(),
-    date:z.date()
+    comments:z.array(z.string()).nonempty() // .nonempty() allows us to make sure that the array is not empty
 }).strict()
-const BlogSchema = z.object({
-    title:z.string(),
-    description:z.string(),
-    date:z.date()
-}).passthrough()
-
 type Blog=z.infer<typeof BlogSchema >
+
+
+console.log(BlogSchema.shape.comments.element)
 const blog:Blog={
     title:"Hello",
     description:"Hello world",
     date:new Date(),
-    comments:"Hello world"
-}
-console.log(BlogSchema.safeParse(blog).success) // it will return true but it will not include the comments property in the type Blog
-If we want to avoid it we can use .strict() method: It will throw an error if we pass a property that is not in the schema
-If we want to avoid it we can use .passthrough() method: It will not throw an error if we pass a property that is not in the schema
-
-
+    comments:["Hello world"]
+}  // returns the type inside the array
 
 
 
