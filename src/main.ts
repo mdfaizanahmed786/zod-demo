@@ -39,7 +39,16 @@ console.log(UserSchema.shape.username)
 
 
 
+const BlogSchema = z.object({
+    title:z.string(),
+    description:z.string(),
+    date:z.date(),
 
+  
+    //   we also many other types like: z.never(), z.unknown(), z.any(), z.null(), z.undefined(), z.void()(returns undefined),  z.unknown()
+  }).pick({title:true});  //.pick() allows us to pick the properties that we want to use
+  type Blog=z.infer<typeof BlogSchema>
+// when we hover Blog it only gives us the title property which is is specified in pick method.
 
 
 
