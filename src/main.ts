@@ -152,28 +152,41 @@ console.log(UserSchema.shape.username)
 
 
 // 9. Unions in zod
-const BlogSchema = z.object({
-    title:z.string(),
-    description:z.string(),
-    date:z.date(),
-    comments:z.union([z.string(), z.number()]), // .union() allows us to create a union
-    number:z.string().or(z.number())
-}).strict()
-type Blog=z.infer<typeof BlogSchema >
-const blog:Blog={
-    title:"Hello",
-    description:"Hello world",
-    date:new Date(),
-    comments:"Hello world" , // we can pass a string or a number
-    number:1 // we can pass a string or a number
-}  // returns the type inside the array
+// const BlogSchema = z.object({
+//     title:z.string(),
+//     description:z.string(),
+//     date:z.date(),
+//     comments:z.union([z.string(), z.number()]), // .union() allows us to create a union
+//     number:z.string().or(z.number())
+// }).strict()
+// type Blog=z.infer<typeof BlogSchema >
+// const blog:Blog={
+//     title:"Hello",
+//     description:"Hello world",
+//     date:new Date(),
+//     comments:"Hello world" , // we can pass a string or a number
+//     number:1 // we can pass a string or a number
+// }  // returns the type inside the array
+
+
+// 10. record in zod(record allows us to create object with typed keys and typed values)
+// const UserMap=z.record(z.string(), z.number()) // .record() allows us to create a record
+// const user2={
+//     "1":43,
+//     "2":43
+// }
+// console.log(UserMap.parse(user2)) 
 
 
 
+// 11.Map in zod
+const UserMap=z.map(z.string(), z.object({name:z.string()}))
+const user2=new Map([
+    ["1", {name:"Hello"}],
+    ["2", {name:"Hello"}]
+])
 
-
-
-
+console.log(UserMap.parse(user2)) // .map() allows us to create a map
 
 
 
