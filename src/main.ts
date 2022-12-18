@@ -1,4 +1,6 @@
 import { z } from "zod";
+import {fromZodError} from "zod-validation-error"
+
 const hobbies=["coding","reading","gaming"] as const
 const UserSchema = z.object({
   username: z.string(),
@@ -43,6 +45,7 @@ const BlogSchema = z.object({
     date:z.date(),
 
   
+
 //2.     //   we also many other types like: z.never(), z.unknown(), z.any(), z.null(), z.undefined(), z.void()(returns undefined),  z.unknown()
 //   }).pick({title:true});  //.pick() allows us to pick the properties that we want to use
 //   type Blog=z.infer<typeof BlogSchema>
@@ -63,6 +66,8 @@ const BlogSchema = z.object({
 
 
 
+
+
 //4. Extending the schema
 const BlogSchema = z.object({
     title:z.string(),
@@ -73,6 +78,9 @@ type Blog=z.infer<typeof BlogSchema >
 
 
 
+
+
+
 //5. Merging the schema
 const BlogSchema = z.object({
     title:z.string(),
@@ -80,6 +88,8 @@ const BlogSchema = z.object({
     date:z.date()
 }).merge(z.object({comments:z.string()})) // .merge() allows us to merge the schema  
 type Blog=z.infer<typeof BlogSchema >                                                  
+
+
 
 
 
@@ -104,13 +114,18 @@ const blog:Blog={
     date:new Date(),
     comments:"Hello world"
 }
-console.log(BlogSchema.safeParse(blog).success) // it will return true but it will not include the comments property in the type Blog
+// console.log(BlogSchema.safeParse(blog).success) // it will return true but it will not include the comments property in the type Blog
 // If we want to avoid it we can use .strict() method: It will throw an error if we pass a property that is not in the schema
 // If we want to avoid it we can use .passthrough() method: It will not throw an error if we pass a property that is not in the schema
 
 
-//7. Arrays im zod
 
+
+
+
+
+
+//7. Arrays im zod
 const BlogSchema = z.object({
     title:z.string(),
     description:z.string(),
@@ -127,6 +142,11 @@ const blog:Blog={
     date:new Date(),
     comments:["Hello world"]
 }  // returns the type inside the array
+
+
+
+
+
 
 
 
@@ -151,6 +171,11 @@ const blog:Blog={
 // // Enums allow us to create a type that can only have the values that we specify
 
 
+
+
+
+
+
 // 9. Unions in zod
 const BlogSchema = z.object({
     title:z.string(),
@@ -167,6 +192,11 @@ const blog:Blog={
     comments:"Hello world" , // we can pass a string or a number
     number:1 // we can pass a string or a number
 }  // returns the type inside the array
+
+
+
+
+
 
 
 // 10. record in zod(record allows us to create object with typed keys and typed values)
@@ -189,10 +219,23 @@ const user2=new Map([
 console.log(UserMap.parse(user2)) // .map() allows us to create a map
 
 
+
+
+
+
 // 12. Sets in zod
 const UserSet=z.set(z.string())
 const user3=new Set(["Hello", "Hello4"])
 console.log(UserSet.parse(user3)) // .set() allows us to create a set
+
+
+
+
+
+
+
+
+
 
 
 
@@ -202,6 +245,45 @@ const UserPromise=z.promise(z.string())
 const promise=Promise.resolve("dhfd")
 
 console.log(UserPromise.parse(promise)) // .promise() allows us to create a promise
+
+
+
+
+
+
+// 14. Cusotom validation using zod with refine keyword
+const emailSchema=z.string().email().refine(val=>val.endsWith("@riyan.com"), {message:"Email must end with @riyan.com"})
+const email="faizan@riyan.com"
+console.log(emailSchema.parse(email))  // will throw an error
+
+
+
+
+
+
+// 15. Error handling in zod. In zod, handling errors is a tedious task, to make it easier we install a built in library called zod-validation-errors
+const UserSchema2=z.object({
+    name:z.string().optional(),
+    age:z.number().min(13, "Age must be greater than 13").max(100, "Age must be less than 100")
+
+})
+// safeParse() returns an object with two properties, success and error and parse returns the actual object values.
+const user24=UserSchema2.safeParse({age:0})
+if(!user24.success){
+console.log(fromZodError(user24.error))
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

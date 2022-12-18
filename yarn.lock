@@ -231,6 +231,11 @@ vite@^4.0.0:
   optionalDependencies:
     fsevents "~2.3.2"
 
+zod-validation-error@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/zod-validation-error/-/zod-validation-error-0.2.2.tgz#934a7275f8b0977613ddf74731c4da519330802a"
+  integrity sha512-CD7i+LIxdskkgxhVOsCr5F1Q4kbnbpgQGBQXdNdFxKCecS4OFseekJ5gOkNu/Y6rapQ4Rj7XBYMckBhyOZm+lQ==
+
 zod@^3.20.2:
   version "3.20.2"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.20.2.tgz#068606642c8f51b3333981f91c0a8ab37dfc2807"
