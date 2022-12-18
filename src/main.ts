@@ -12,13 +12,16 @@ const UserSchema = z.object({
   hobbies: z.enum(hobbies),
 
   //   we also many other types like: z.never(), z.unknown(), z.any(), z.null(), z.undefined(), z.void()(returns undefined),  z.unknown()
-});
+}).partial();  //.partial() allows us to make all the values optional
+
+
+
 // instead of creating a type we can use z.infer to infer the type from schema
 type User = z.infer<typeof UserSchema>;
 const user: User = {
   username: "Faizan",
   isProgrammer: null,
-  position: "Software",
+//   position: "Software",
   salary: 1000,
   dish: "pizza",
   hobbies: "coding", // enum allow us to pass only the values that are passed in the enum
@@ -26,6 +29,31 @@ const user: User = {
 // Instead of throwing error it wil return success true or false
 console.log(UserSchema.safeParse(user).success); // It wil omit true or false if we use parse it will throw error
 console.log(UserSchema.parse(user));
+// Working with objects
+// UserSchema.shape gives us the shape of the object which includes the type of the object
+console.log(UserSchema.shape)
+console.log(UserSchema.shape.username)
+
+
+// Partial matching
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //   some of the validations are:
 //   z.string().min(5) // min length
